@@ -2,11 +2,36 @@ import influxdb_client
 import influxdb_client.rest
 import urllib3.exceptions
 from pydantic import BaseModel
-from PySide2 import QtCore, QtWidgets
-from PySide2.QtWidgets import QStyle, QToolButton, QWidget
+from PySide2 import QtWidgets
+from PySide2.QtCore import QThread, Signal
+from PySide2.QtWidgets import (
+    QStyle,
+    QToolButton,
+)
+from qt_utils import messaging
+
+from .generic_config import QGenericSettingsWidget
 
 
-class QInfluxConfigWidget(QWidget):
+class InfluxConfigTestThread(QThread):
+    result_signal = Signal(messaging.Result)
+
+    def __init__(self, config: "QInfluxConfigWidget.Model") -> None:
+        QThread.__init__(self)
+        self.config = config
+
+    def run(self):
+        try:
+            self.config.test_connection()
+            self.config.check_query()
+
+            self.result_signal.emit(messaging.Success(message="Connection successful").to_result())
+            pass
+        except Exception as e:
+            self.result_signal.emit(messaging.Error.from_exception(e).to_result())
+
+
+class QInfluxConfigWidget(QGenericSettingsWidget):
     class Model(BaseModel):
         url: str
         token: str
@@ -23,7 +48,7 @@ class QInfluxConfigWidget(QWidget):
                 url=self.url,
                 token=self.token,
                 debug=self.debug,
-                timeout=6000,
+                timeout=self.timeout,
                 org=self.org,
                 enable_gzip=True,
                 verify_ssl=self.force_ssl,
@@ -60,7 +85,7 @@ class QInfluxConfigWidget(QWidget):
 
                 raise e
 
-    changed = QtCore.Signal(Model)
+    test_thread: InfluxConfigTestThread | None = None
 
     def __init__(self) -> None:
         super().__init__()
@@ -92,12 +117,12 @@ class QInfluxConfigWidget(QWidget):
 
         self.timeout_input = QtWidgets.QSpinBox()
         self.timeout_input.valueChanged.connect(self._on_value_changed)
-        self.timeout_input.setRange(0, 60000)
+        self.timeout_input.setRange(0, 600)
         self.timeout_input.setSuffix("s")
 
         self.flush_delay_input = QtWidgets.QDoubleSpinBox()
         self.flush_delay_input.valueChanged.connect(self._on_value_changed)
-        self.flush_delay_input.setRange(0, 60000)
+        self.flush_delay_input.setRange(0, 600)
         self.flush_delay_input.setSuffix("s")
 
         # Test button
@@ -135,19 +160,25 @@ class QInfluxConfigWidget(QWidget):
             self.show_advanced_options.setIcon(self.style().standardIcon(QStyle.SP_ArrowDown))
             self.advanced_options.setHidden(True)
 
-    def _on_value_changed(self, value):
-        self.changed.emit(self.data)
+        is_running = self.test_thread is not None and self.test_thread.isRunning()
+
+        if is_running:
+            self.test_button.setText("Testing...")
+        else:
+            self.test_button.setText("Check connection")
+
+        self.test_button.setEnabled(not is_running)
 
     def _on_test_clicked(self):
-        try:
-            self.data.test_connection()
-            self.data.check_query()
-        except Exception as e:
-            # extensice error with traceback
-            QtWidgets.QMessageBox.critical(self, "Error", str(e))
+        if self.test_thread is not None and self.test_thread.isRunning():
+            messaging.Error(trace="", error="Test already running").to_result().display(self)
             return
 
-        QtWidgets.QMessageBox.information(self, "Success", "Connection successful.")
+        self.test_thread = InfluxConfigTestThread(self.data)
+        self.test_thread.result_signal.connect(lambda result: result.display(self))
+        self.test_thread.started.connect(self._update_ui)
+        self.test_thread.finished.connect(self._update_ui)
+        self.test_thread.start()
 
     @property
     def data(self) -> Model:
@@ -160,7 +191,7 @@ class QInfluxConfigWidget(QWidget):
             force_ssl=self.force_ssl_input.isChecked(),
             flush_delay=self.flush_delay_input.value(),
             debug=self.debug_input.isChecked(),
-            timeout=self.timeout_input.value(),
+            timeout=self.timeout_input.value() // 1000,
         )
 
     @data.setter
@@ -173,4 +204,4 @@ class QInfluxConfigWidget(QWidget):
         self.force_ssl_input.setChecked(value.force_ssl)
         self.flush_delay_input.setValue(value.flush_delay)
         self.debug_input.setChecked(value.debug)
-        self.timeout_input.setValue(value.timeout)
+        self.timeout_input.setValue(value.timeout * 1000)

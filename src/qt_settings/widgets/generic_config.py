@@ -7,7 +7,7 @@ class QGenericSettingsWidget(QWidget):
     class Model(BaseModel):
         pass
 
-    changed = QtCore.Signal(Model)
+    changed = QtCore.Signal(object)
 
     def __init__(self) -> None:
         super().__init__()
@@ -20,3 +20,6 @@ class QGenericSettingsWidget(QWidget):
     def data(self, value: Model) -> None:
         del value
         raise NotImplementedError()
+
+    def _on_value_changed(self, value):
+        self.changed.emit(self.data)

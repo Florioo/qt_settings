@@ -1,15 +1,14 @@
 from pydantic import BaseModel, Field
-from PySide2 import QtCore, QtWidgets
-from PySide2.QtWidgets import QStyle, QToolButton, QWidget
+from PySide2 import QtWidgets
+from PySide2.QtWidgets import QStyle, QToolButton
 
+from .generic_config import QGenericSettingsWidget
 from .path.path_query import PathQuery
 
 
-class QPathSelector(QWidget):
+class QPathSelector(QGenericSettingsWidget):
     class PathModel(BaseModel):
         path: str = Field(max_length=100)
-
-    changed = QtCore.Signal(PathModel)
 
     def __init__(self, supported_types: str, type: PathQuery.LoadSaveEnum, manually_editable: bool = True):
         super().__init__()
@@ -46,9 +45,6 @@ class QPathSelector(QWidget):
     def _on_button_clicked(self):
         selected_path = self.path_query.get_path(self.type)
         self.path.setText(selected_path)
-
-    def _on_value_changed(self, value):
-        self.changed.emit(self.data)
 
     @property
     def data(self) -> PathModel:
