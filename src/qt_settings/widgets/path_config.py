@@ -1,10 +1,6 @@
-from re import S
-from typing import Optional
-
 from pydantic import BaseModel, Field
-from PySide2 import QtCore, QtGui, QtWidgets
-from PySide2.QtCore import QSettings
-from PySide2.QtWidgets import QApplication, QFileDialog, QStyle, QToolButton, QWidget
+from PySide2 import QtCore, QtWidgets
+from PySide2.QtWidgets import QStyle, QToolButton, QWidget
 
 from .path.path_query import PathQuery
 

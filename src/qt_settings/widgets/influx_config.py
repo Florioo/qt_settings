@@ -1,12 +1,10 @@
-from typing import Optional
-
-from pydantic import BaseModel, Field
-from PySide2 import QtCore, QtGui, QtWidgets
-from PySide2.QtCore import QSettings
-from PySide2.QtWidgets import QApplication, QFileDialog, QStyle, QToolButton, QWidget
 import influxdb_client
 import influxdb_client.rest
 import urllib3.exceptions
+from pydantic import BaseModel
+from PySide2 import QtCore, QtWidgets
+from PySide2.QtWidgets import QStyle, QToolButton, QWidget
+
 
 class QInfluxConfigWidget(QWidget):
     class Model(BaseModel):
@@ -31,17 +29,17 @@ class QInfluxConfigWidget(QWidget):
                 verify_ssl=self.force_ssl,
             )
             return client
-        
+
         def test_connection(self):
             client = self.get_client()
             try:
-                response = client.api_client.request("GET", f'{self.url}/ping')
+                response = client.api_client.request("GET", f"{self.url}/ping")
             except urllib3.exceptions.NameResolutionError as e:
                 raise Exception(f"Url does not exist '{self.url}'") from e
 
             if response.status != 204:
                 raise Exception(f"Connection to '{self.url}' failed.")
-            
+
             return client
 
         def check_query(self):
@@ -49,15 +47,17 @@ class QInfluxConfigWidget(QWidget):
             """Check that the credentials has permission to query from the Bucket"""
 
             try:
-                client.query_api().query(f"from(bucket:\"{self.bucket}\") |> range(start: -1m) |> limit(n:1)", self.org)
+                client.query_api().query(f'from(bucket:"{self.bucket}") |> range(start: -1m) |> limit(n:1)', self.org)
             except influxdb_client.rest.ApiException as e:
                 # missing credentials
                 if e.status == 404:
-                    raise Exception(f"The specified token doesn't have sufficient credentials to "
-                                    f"read from '{self.bucket}' bucket or specified bucket doesn't exists.") from e
+                    raise Exception(
+                        f"The specified token doesn't have sufficient credentials to "
+                        f"read from '{self.bucket}' bucket or specified bucket doesn't exists."
+                    ) from e
                 if e.status == 401:
                     raise Exception("The specified token is invalid.") from e
-                
+
                 raise e
 
     changed = QtCore.Signal(Model)
@@ -83,7 +83,6 @@ class QInfluxConfigWidget(QWidget):
         self.show_advanced_options.setIcon(self.style().standardIcon(QStyle.SP_ArrowDown))
         self.show_advanced_options.clicked.connect(self._update_ui)
 
-
         # Advanced options
         self.force_ssl_input = QtWidgets.QCheckBox("Force SSL")
         self.force_ssl_input.stateChanged.connect(self._on_value_changed)
@@ -101,10 +100,9 @@ class QInfluxConfigWidget(QWidget):
         self.flush_delay_input.setRange(0, 60000)
         self.flush_delay_input.setSuffix("s")
 
-        #Test button
+        # Test button
         self.test_button = QtWidgets.QPushButton("Test config")
         self.test_button.clicked.connect(self._on_test_clicked)
-        
 
         self.advanced_options = QtWidgets.QGroupBox("Advanced options")
         self.advanced_options.setHidden(True)
@@ -126,9 +124,9 @@ class QInfluxConfigWidget(QWidget):
         self._layout.addRow(self.advanced_options)
         self._layout.addRow(self.test_button)
         self.setLayout(self._layout)
-        
+
         self._update_ui()
-        
+
     def _update_ui(self):
         if self.show_advanced_options.isChecked():
             self.show_advanced_options.setIcon(self.style().standardIcon(QStyle.SP_ArrowUp))
@@ -148,8 +146,9 @@ class QInfluxConfigWidget(QWidget):
             # extensice error with traceback
             QtWidgets.QMessageBox.critical(self, "Error", str(e))
             return
-        
+
         QtWidgets.QMessageBox.information(self, "Success", "Connection successful.")
+
     @property
     def data(self) -> Model:
         return self.Model(

@@ -1,1 +1,3 @@
-from .widgets import *
+from .widgets import * # noqa
+
+

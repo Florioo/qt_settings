@@ -7,5 +7,5 @@ def show_widget(widget: QWidget):
     app.exec_()
 
 
-if __name__ == '__main__':
-    show_widget(QLabel('Hello World!'))
+if __name__ == "__main__":
+    show_widget(QLabel("Hello World!"))
