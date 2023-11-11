@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "qt-settings"
+version = "0.1.0"
+description = ""
+authors = ["floris vernieuwe <floris@vernieuwe.eu>"]
+readme = "README.md"
+
+[tool.poetry-dynamic-versioning]
+enable = false
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.11"
+pydantic = "^2.4.2"
+poetry-dynamic-versioning = "^1.1.1"
+pyside2-stubs = "^5.15.2.1.2"
+influxdb-client = "^1.38.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pyside2 = "^5.15.2.1"
+black = "^23.11.0"
+ruff = "^0.1.5"
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.black]
+line-length = 120
+
+[tool.pyright]
+exclude = ["packages",".venv","target"]
+
+[tool.ruff.lint]
+select = ["E", "F"]
+
+[tool.ruff]
+exclude = [
+    ".venv",
+    "src/main/python/ui"
+]
+# Add organize imports
+extend-select = ["I"]
+
+
+line-length = 120
+# indent-width = 4
