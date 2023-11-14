@@ -35,15 +35,16 @@ class PathQuery:
         if self.settings is not None:
             self.settings.setValue(self.save_name, folder)
 
-    def get_path(self, type: LoadSaveEnum) -> str | None:
+    def get_path(self, type: LoadSaveEnum, filter :str | None = None) -> str | None:
         last_folder = self.get_last_folder()
-
+        if filter is None:
+            filter = self.supported_types
         if type == self.LoadSaveEnum.LOAD_FILE:
             filePath, _ = QFileDialog.getOpenFileName(
                 parent=self._parent,
                 caption="Open File",
                 dir=last_folder,
-                filter=self.supported_types,
+                filter=filter,
                 options=QFileDialog.Options(),
             )
 
@@ -52,7 +53,7 @@ class PathQuery:
                 parent=self._parent,
                 caption="Save File",
                 dir=last_folder,
-                filter=self.supported_types,
+                filter=filter,
                 options=QFileDialog.Options(),
             )
 

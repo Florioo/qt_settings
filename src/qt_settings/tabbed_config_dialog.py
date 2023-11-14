@@ -6,7 +6,7 @@ from PySide2.QtWidgets import QWidget
 from qt_utils import messaging
 
 from .widgets import PathQuery, QGenericSettingsWidget
-
+import logging
 
 class ConfigDialog(QtWidgets.QDialog):
     configs: Dict[str, QGenericSettingsWidget]
@@ -18,7 +18,7 @@ class ConfigDialog(QtWidgets.QDialog):
 
         self.setWindowTitle("Configuration")
         self.resize(400, 300)
-
+        self.log = logging.getLogger(__name__)
         # Create a import/export widget
         import_button = QtWidgets.QPushButton("Import")
         export_button = QtWidgets.QPushButton("Export")
@@ -63,6 +63,7 @@ class ConfigDialog(QtWidgets.QDialog):
 
         with open(path, "r") as f:
             self.from_json(f.read())
+        self.log.info(f"Loaded config from {path}")
 
     @messaging.catch_exception("Failed to save config to file")
     def save_to_file(self):
@@ -73,16 +74,19 @@ class ConfigDialog(QtWidgets.QDialog):
 
         with open(path, "w") as f:
             f.write(self.to_json())
+        self.log.info(f"Saved config to {path}")
 
     def save_to_settings(self):
         self.settings.setValue("config", self.to_json())
+        self.log.info("Saved config to settings")
 
     def load_from_settings(self):
         data = self.settings.value("config", "{}", str)
         if data is None or not isinstance(data, str):
             return
         self.from_json(data)
-
+        self.log.info("Loaded config from settings")
+        
     def open(self):
         self.show()
 
