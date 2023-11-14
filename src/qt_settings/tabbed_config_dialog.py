@@ -1,4 +1,5 @@
 import json
+import logging
 from typing import Dict
 
 from PySide2 import QtCore, QtWidgets
@@ -6,7 +7,7 @@ from PySide2.QtWidgets import QWidget
 from qt_utils import messaging
 
 from .widgets import PathQuery, QGenericSettingsWidget
-import logging
+
 
 class ConfigDialog(QtWidgets.QDialog):
     configs: Dict[str, QGenericSettingsWidget]
@@ -86,7 +87,7 @@ class ConfigDialog(QtWidgets.QDialog):
             return
         self.from_json(data)
         self.log.info("Loaded config from settings")
-        
+
     def open(self):
         self.show()
 

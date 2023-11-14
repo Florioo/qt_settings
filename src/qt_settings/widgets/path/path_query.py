@@ -35,7 +35,7 @@ class PathQuery:
         if self.settings is not None:
             self.settings.setValue(self.save_name, folder)
 
-    def get_path(self, type: LoadSaveEnum, filter :str | None = None) -> str | None:
+    def get_path(self, type: LoadSaveEnum, filter: str | None = None) -> str | None:
         last_folder = self.get_last_folder()
         if filter is None:
             filter = self.supported_types
