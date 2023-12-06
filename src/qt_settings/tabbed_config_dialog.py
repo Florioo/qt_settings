@@ -106,4 +106,3 @@ class ConfigDialog(QtWidgets.QDialog):
         action = QtWidgets.QAction("Settings", self)
         action.triggered.connect(self.open)
         return action
-    
