@@ -101,3 +101,9 @@ class ConfigDialog(QtWidgets.QDialog):
 
     def data_changed(self):
         self.save_to_settings()
+
+    def get_menuaction(self) -> QtWidgets.QAction:
+        action = QtWidgets.QAction("Settings", self)
+        action.triggered.connect(self.open)
+        return action
+    
