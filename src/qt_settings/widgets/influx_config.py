@@ -191,7 +191,7 @@ class QInfluxConfigWidget(QGenericSettingsWidget):
             force_ssl=self.force_ssl_input.isChecked(),
             flush_delay=self.flush_delay_input.value(),
             debug=self.debug_input.isChecked(),
-            timeout=self.timeout_input.value()*1000,
+            timeout=self.timeout_input.value() * 1000,
         )
 
     @data.setter
@@ -204,4 +204,4 @@ class QInfluxConfigWidget(QGenericSettingsWidget):
         self.force_ssl_input.setChecked(value.force_ssl)
         self.flush_delay_input.setValue(value.flush_delay)
         self.debug_input.setChecked(value.debug)
-        self.timeout_input.setValue(value.timeout/1000)
+        self.timeout_input.setValue(value.timeout / 1000)
