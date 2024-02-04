@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
-from PySide2 import QtWidgets
-from PySide2.QtWidgets import QStyle, QToolButton
+from qtpy import QtWidgets
+from qtpy.QtWidgets import QStyle, QToolButton
 
 from .generic_config import QGenericSettingsWidget
 from .path.path_query import PathQuery

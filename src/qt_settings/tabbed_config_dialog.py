@@ -2,8 +2,8 @@ import json
 import logging
 from typing import Dict
 
-from PySide2 import QtCore, QtWidgets
-from PySide2.QtWidgets import QWidget
+from qtpy import QtCore, QtWidgets
+from qtpy.QtWidgets import QWidget
 from qt_utils import messaging
 
 from .widgets import PathQuery, QGenericSettingsWidget

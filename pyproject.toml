@@ -12,12 +12,11 @@ enable = false
 python = ">=3.10,<3.11"
 pydantic = "^2.4.2"
 poetry-dynamic-versioning = "^1.1.1"
-pyside2-stubs = "^5.15.2.1.2"
+pyside6 = "^6.6.1"
 influxdb-client = "^1.38.0"
 
 
 [tool.poetry.group.dev.dependencies]
-pyside2 = "^5.15.2.1"
 black = "^23.11.0"
 ruff = "^0.1.5"
 

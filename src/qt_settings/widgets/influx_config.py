@@ -2,9 +2,9 @@ import influxdb_client
 import influxdb_client.rest
 import urllib3.exceptions
 from pydantic import BaseModel
-from PySide2 import QtWidgets
-from PySide2.QtCore import QThread, Signal
-from PySide2.QtWidgets import (
+from qtpy import QtWidgets
+from qtpy.QtCore import QThread, Signal
+from qtpy.QtWidgets import (
     QStyle,
     QToolButton,
 )

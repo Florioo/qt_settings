@@ -1,6 +1,6 @@
 from pydantic import BaseModel
-from PySide2 import QtCore
-from PySide2.QtWidgets import QWidget
+from qtpy import QtCore
+from qtpy.QtWidgets import QWidget
 
 
 class QGenericSettingsWidget(QWidget):

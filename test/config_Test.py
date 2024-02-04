@@ -2,8 +2,8 @@ import ctypes
 import sys
 
 from pydantic import BaseModel
-from PySide2 import QtCore, QtGui, QtWidgets
-from PySide2.QtWidgets import QApplication, QWidget
+from qtpy import QtCore, QtGui, QtWidgets
+from qtpy.QtWidgets import QApplication, QWidget
 from qt_settings import PathQuery, QInfluxConfigWidget, QPathSelector
 
 
