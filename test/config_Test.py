@@ -2,9 +2,9 @@ import ctypes
 import sys
 
 from pydantic import BaseModel
+from qt_settings import PathQuery, QInfluxConfigWidget, QPathSelector
 from qtpy import QtCore, QtGui, QtWidgets
 from qtpy.QtWidgets import QApplication, QWidget
-from qt_settings import PathQuery, QInfluxConfigWidget, QPathSelector
 
 
 class StringConfig(QWidget):

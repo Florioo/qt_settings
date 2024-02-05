@@ -2,9 +2,9 @@ import json
 import logging
 from typing import Dict
 
+from qt_utils import messaging
 from qtpy import QtCore, QtWidgets
 from qtpy.QtWidgets import QWidget
-from qt_utils import messaging
 
 from .widgets import PathQuery, QGenericSettingsWidget
 
