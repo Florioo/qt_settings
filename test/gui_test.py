@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QApplication, QLabel, QWidget
+from qtpy.QtWidgets import QApplication, QLabel, QWidget
 
 
 def show_widget(widget: QWidget):

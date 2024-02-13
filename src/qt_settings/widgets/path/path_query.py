@@ -1,8 +1,8 @@
 import os
 from enum import Enum
 
-from PySide2.QtCore import QSettings
-from PySide2.QtWidgets import QFileDialog, QWidget
+from qtpy.QtCore import QSettings
+from qtpy.QtWidgets import QFileDialog, QWidget
 
 
 class PathQuery:
