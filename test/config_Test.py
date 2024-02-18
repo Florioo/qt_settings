@@ -29,7 +29,7 @@ class StringConfig(QWidget):
         self.default = QtWidgets.QLineEdit()
         self.default.setText(self._data.default)
         self.default.textChanged.connect(self._on_value_changed)
-        self.default.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp(r"[^\s]+")))
+        self.default.setValidator(QtGui.QRegularExpressionValidator(QtCore.QRegularExpression(r"[^\s]+")))
 
         self._layout = QtWidgets.QFormLayout()
         self._layout.addRow("Value", self.value_spin)
@@ -128,10 +128,6 @@ class TestConfig(QWidget):
 
 
 if __name__ == "__main__":
-    if sys.platform.startswith("win"):
-        ctypes.windll.user32.SetProcessDPIAware()
-    QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
-    # QtWidgets.QApplication.setHighDpiScaleFactorRoundingPolicy(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
 
     app = QApplication([])
 
