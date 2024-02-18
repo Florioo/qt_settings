@@ -32,7 +32,7 @@ class QPathSelector(QGenericSettingsWidget):
 
         self.button = QToolButton()
 
-        self.button.setIcon(self.style().standardIcon(QStyle.SP_DirIcon))
+        self.button.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_DirIcon))
         self.button.clicked.connect(self._on_button_clicked)
 
         self._layout = QtWidgets.QHBoxLayout()
@@ -44,7 +44,8 @@ class QPathSelector(QGenericSettingsWidget):
 
     def _on_button_clicked(self):
         selected_path = self.path_query.get_path(self.type)
-        self.path.setText(selected_path)
+        if selected_path is not None:
+            self.path.setText(selected_path)
 
     @property
     def data(self) -> PathModel:

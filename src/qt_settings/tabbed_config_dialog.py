@@ -3,7 +3,7 @@ import logging
 from typing import Dict
 
 from qt_utils import messaging
-from qtpy import QtCore, QtWidgets
+from qtpy import QtCore, QtGui, QtWidgets
 from qtpy.QtWidgets import QWidget
 
 from .widgets import PathQuery, QGenericSettingsWidget
@@ -102,7 +102,7 @@ class ConfigDialog(QtWidgets.QDialog):
     def data_changed(self):
         self.save_to_settings()
 
-    def get_menuaction(self) -> QtWidgets.QAction:
-        action = QtWidgets.QAction("Settings", self)
+    def get_menuaction(self) -> QtGui.QAction:
+        action = QtGui.QAction("Settings", self)
         action.triggered.connect(self.open)
         return action

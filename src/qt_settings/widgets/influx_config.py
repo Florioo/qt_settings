@@ -105,7 +105,7 @@ class QInfluxConfigWidget(QGenericSettingsWidget):
         self.show_advanced_options = QToolButton()
         self.show_advanced_options.setCheckable(True)
         self.show_advanced_options.setChecked(False)
-        self.show_advanced_options.setIcon(self.style().standardIcon(QStyle.SP_ArrowDown))
+        self.show_advanced_options.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_ArrowDown))
         self.show_advanced_options.clicked.connect(self._update_ui)
 
         # Advanced options
@@ -154,10 +154,10 @@ class QInfluxConfigWidget(QGenericSettingsWidget):
 
     def _update_ui(self):
         if self.show_advanced_options.isChecked():
-            self.show_advanced_options.setIcon(self.style().standardIcon(QStyle.SP_ArrowUp))
+            self.show_advanced_options.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_ArrowUp))
             self.advanced_options.setHidden(False)
         else:
-            self.show_advanced_options.setIcon(self.style().standardIcon(QStyle.SP_ArrowDown))
+            self.show_advanced_options.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_ArrowDown))
             self.advanced_options.setHidden(True)
 
         is_running = self.test_thread is not None and self.test_thread.isRunning()
@@ -191,7 +191,7 @@ class QInfluxConfigWidget(QGenericSettingsWidget):
             force_ssl=self.force_ssl_input.isChecked(),
             flush_delay=self.flush_delay_input.value(),
             debug=self.debug_input.isChecked(),
-            timeout=self.timeout_input.value() * 1000,
+            timeout=int(self.timeout_input.value() * 1000),
         )
 
     @data.setter

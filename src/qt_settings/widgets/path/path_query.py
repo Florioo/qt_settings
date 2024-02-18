@@ -45,7 +45,6 @@ class PathQuery:
                 caption="Open File",
                 dir=last_folder,
                 filter=filter,
-                options=QFileDialog.Options(),
             )
 
         elif type == self.LoadSaveEnum.SAVE_FILE:
@@ -54,7 +53,6 @@ class PathQuery:
                 caption="Save File",
                 dir=last_folder,
                 filter=filter,
-                options=QFileDialog.Options(),
             )
 
         elif type == self.LoadSaveEnum.EXISTING_DIRECTORY:
@@ -62,7 +60,6 @@ class PathQuery:
                 parent=self._parent,
                 caption="Open Directory",
                 dir=last_folder,
-                options=QFileDialog.Options(),
             )
 
         else:

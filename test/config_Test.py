@@ -1,6 +1,3 @@
-import ctypes
-import sys
-
 from pydantic import BaseModel
 from qt_settings import PathQuery, QInfluxConfigWidget, QPathSelector
 from qtpy import QtCore, QtGui, QtWidgets
@@ -128,7 +125,6 @@ class TestConfig(QWidget):
 
 
 if __name__ == "__main__":
-
     app = QApplication([])
 
     widget = TestConfig()
