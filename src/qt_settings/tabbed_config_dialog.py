@@ -11,6 +11,7 @@ from .widgets import PathQuery, QGenericSettingsWidget
 
 class ConfigDialog(QtWidgets.QDialog):
     configs: Dict[str, QGenericSettingsWidget]
+    block_signals: bool = False
 
     def __init__(self, parent: QWidget, settings: QtCore.QSettings):
         super().__init__(parent)
@@ -54,6 +55,7 @@ class ConfigDialog(QtWidgets.QDialog):
                     config.data = config.data.model_validate(data[name])  # type: ignore
                 except Exception as e:
                     print(e)
+        self.log.info("Loaded config from settings")
 
     @messaging.catch_exception("Failed to load config from file")
     def load_from_file(self):
@@ -77,16 +79,27 @@ class ConfigDialog(QtWidgets.QDialog):
             f.write(self.to_json())
         self.log.info(f"Saved config to {path}")
 
+    @messaging.catch_exception("Failed to load default config")
+    def load_default(self):
+        for config in self.configs.values():
+            config.from_default()
+        self.log.info("Loaded default config")
+
     def save_to_settings(self):
+        
         self.settings.setValue("config", self.to_json())
         self.log.info("Saved config to settings")
 
     def load_from_settings(self):
-        data = self.settings.value("config", "{}", str)
-        if data is None or not isinstance(data, str):
-            return
-        self.from_json(data)
-        self.log.info("Loaded config from settings")
+        self.block_signals = True
+        data = self.settings.value("config", None, str)
+        if data is None or not isinstance(data, str) or data == "":
+            self.log.error("Failed to load config from settings")
+            self.load_default()
+        else:    
+            self.from_json(data)
+        self.block_signals = False
+        self.save_to_settings()
 
     def open(self):
         self.show()
@@ -100,6 +113,10 @@ class ConfigDialog(QtWidgets.QDialog):
         self._tab_widget.addTab(widget, name)
 
     def data_changed(self):
+        
+        if self.block_signals:
+            return
+        
         self.save_to_settings()
 
     def get_menuaction(self) -> QtGui.QAction:
