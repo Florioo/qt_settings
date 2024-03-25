@@ -86,6 +86,7 @@ class ConfigDialog(QtWidgets.QDialog):
         self.log.info("Loaded default config")
 
     def save_to_settings(self):
+        
         self.settings.setValue("config", self.to_json())
         self.log.info("Saved config to settings")
 
