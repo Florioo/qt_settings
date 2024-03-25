@@ -21,5 +21,8 @@ class QGenericSettingsWidget(QWidget):
         del value
         raise NotImplementedError()
 
-    def _on_value_changed(self, value):
+    def _on_value_changed(self, *args, **kwargs):
         self.changed.emit(self.data)
+
+    def from_default(self):
+        self.data = self.Model()
