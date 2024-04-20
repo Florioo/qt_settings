@@ -32,13 +32,13 @@ exclude = [".venv"]
 
 [tool.ruff.lint]
 select = ["E", "F"]
+extend-select = ["I"]
 
 [tool.ruff]
 exclude = [
     ".venv",
 ]
 # Add organize imports
-extend-select = ["I"]
 
 
 line-length = 120
